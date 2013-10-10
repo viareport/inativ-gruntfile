@@ -127,4 +127,13 @@ module.exports = require('gruntfile')(function (grunt) {
     grunt.registerTask('dist', ['test', 'bumpup']);
 
     grunt.registerTask('default', ['build', 'watch']);
+
+    grunt.registerTask('help', function(){
+       grunt.log.writeln("Trois tasks principales :\n" +
+           " grunt demo : pour lancer la demo \n" +
+           " grunt test : pour lancer tous les tests (unit test et testem \n" +
+           " grunt dist : pour tout builder et bumper \n" +
+           "\n" +
+           "Et comme d'habitude, la tache de base grunt qui build");
+    });
 });
