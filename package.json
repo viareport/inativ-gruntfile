@@ -1,10 +1,10 @@
 {
   "name": "inativ-gruntfile",
-  "version": "0.0.0",
+  "version": "0.0.1",
   "description": "ERROR: No README.md file found!",
   "main": "Gruntfile.js",
   "dependencies": {
-    "gruntfile": "~0.1.0"
+    "gruntfile": "0.1.0"
   },
     "devDependencies": {
         "bower": "0.7.0",
@@ -20,10 +20,11 @@
         "grunt-bumpup": "~0.2.0",
         "grunt-testem": "~0.3.6",
         "spatester": "1.x.x",
-        "grunt-mkdir": "~0.1.1"
+        "grunt-mkdir": "~0.1.1",
+        "grunt-parallel": "0.3.1"
     },
     "engines": {
-        "node": ">=0.4.0"
+            "node": "~0.10.18"
     },
     "author": {
         "name": "Inativ",
