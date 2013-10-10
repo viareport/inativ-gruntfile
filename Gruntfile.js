@@ -1,6 +1,7 @@
 module.exports = require('gruntfile')(function (grunt) {
     grunt.loadNpmTasks('grunt-contrib-clean');
     grunt.loadNpmTasks('grunt-contrib-compass');
+    grunt.loadNpmTasks('grunt-contrib-concat');
     grunt.loadNpmTasks('grunt-contrib-connect');
     grunt.loadNpmTasks('grunt-contrib-copy');
     grunt.loadNpmTasks('grunt-contrib-jshint');
@@ -8,17 +9,36 @@ module.exports = require('gruntfile')(function (grunt) {
     grunt.loadNpmTasks('grunt-browserify');
     grunt.loadNpmTasks('grunt-bumpup');
     grunt.loadNpmTasks('grunt-testem');
+    grunt.loadNpmTasks('grunt-mkdir');
 // Project configuration.
     grunt.initConfig({
 
         clean: {
-            main: ['dist/*.js', 'dist/*.css', 'testem*json']
+            build: ['dist/*.js', 'dist/*.css'],
+            test: ['test/testbuild.js', 'test/main.*', 'test/x-tag-core.js', 'testem*json', 'test-result/*'],
+            demo: ['build/*.js', 'build/*.css']
         },
         compass: {
             main: {
                 options: {
                     config: 'assets/compass_config.rb'
                 }
+            }
+        },
+        concat: {
+            demo: {
+                src: [
+                    './node_modules/inativ-x-*/dist/*.css',
+                    './dist/inativ-x.css'
+                ],
+                dest: 'build/main.css'
+            },
+            test: {
+                src: [
+                    './node_modules/*/dist/*.css',
+                    './dist/inativ-x.css'
+                ],
+                dest: 'test/main.css'
             }
         },
         connect: {
@@ -48,10 +68,14 @@ module.exports = require('gruntfile')(function (grunt) {
             }
         },
         browserify: {
-            main: {
+            test: {
                 files: {
-                    'test/testbuild.js': ['test/test.js'],
-                    'demo/main.js': ['src/main.js']
+                    'test/main.js': ['src/main.js', 'test/test.js']
+                }
+            },
+            demo: {
+                files: {
+                    'build/main.js': ['src/main.js']
                 }
             }
         },
@@ -73,6 +97,13 @@ module.exports = require('gruntfile')(function (grunt) {
                 src: [ 'test/TestemSuite.html' ],
                 dest: 'test-result/testem-ci.tap'
             }
+        },
+        mkdir: {
+            'test-result': {
+                options: {
+                    create: ['test-result']
+                }
+            }
         }
     });
 
@@ -84,8 +115,15 @@ module.exports = require('gruntfile')(function (grunt) {
     });
 
     grunt.registerTask('build', ['clean', 'browserify', 'jshint', 'compass', 'copy']);
-    grunt.registerTask('demo', ['build', 'launchDemo']);
-    grunt.registerTask('test', ['build', 'testem']);
+
+    grunt.registerTask('buildDemo', ['build', 'clean:demo', 'concat:demo', 'browserify:demo']);
+    grunt.registerTask('watchDemo', ['buildDemo', 'watch:demo']);
+    grunt.registerTask('demo', ['buildDemo', 'launchDemo']);
+
+    grunt.registerTask('buildTest', ['build', 'clean:test', 'concat:test', 'browserify:test']);
+    grunt.registerTask('test',  ['buildTest', 'mkdir:test-result', 'testem']);
+
+
     grunt.registerTask('dist', ['test', 'bumpup']);
 
     grunt.registerTask('default', ['build', 'watch']);
