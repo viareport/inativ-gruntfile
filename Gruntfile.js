@@ -16,9 +16,15 @@ module.exports = require('gruntfile')(function (grunt) {
     grunt.initConfig({
 
         clean: {
-            build: ['dist/*.js', 'dist/*.css'],
-            test: ['test/testbuild.js', 'test/main.*', 'test/x-tag-core.js', 'testem*json', 'test-result/*'],
-            demo: ['build/*.js', 'build/*.css']
+            build: {
+                src: ['dist/*.js', 'dist/*.css']
+            },
+            test: {
+                src: ['test/testbuild.js', 'test/main.*', 'test/x-tag-core.js', 'testem*json', 'test-result/*']
+            },
+            demo: {
+                src: ['build/*.js', 'build/*.css']
+            }
         },
         compass: {
             main: {
@@ -144,7 +150,7 @@ module.exports = require('gruntfile')(function (grunt) {
 
     grunt.registerTask('build', ['clean', 'browserify', 'jshint', 'compass', 'copy']);
 
-    grunt.registerTask('buildDemo', ['build', 'clean:demo', 'concat:demo', 'browserify:demo']);
+    grunt.registerTask('buildDemo', ['jshint', 'compass', 'copy', 'clean:demo', 'concat:demo', 'browserify:demo']);
     grunt.registerTask('watchDemo', ['buildDemo', 'watch:demo']);
     grunt.registerTask('demo', 'parallel:demoWatch');
 
