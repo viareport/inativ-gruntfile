@@ -12,7 +12,7 @@ module.exports = require('gruntfile')(function (grunt) {
     grunt.loadNpmTasks('grunt-mkdir');
     grunt.loadNpmTasks('grunt-parallel');
 
-    // Project configuration.
+    // Project configuration. 
     grunt.initConfig({
 
         clean: {
