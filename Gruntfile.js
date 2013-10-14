@@ -62,10 +62,20 @@ module.exports = require('gruntfile')(function (grunt) {
             all: ['Gruntfile.js', 'src/main.js']
         },
         watch: {
-            files: ['src/*.js', 'src/*.scss', 'test/test.js'],
-            tasks: ['build'],
-            options: {
-                spawn: false
+            demo: {
+                files: ['src/*.js', 'src/*.scss', 'demo/index.html'],
+                tasks: ['buildDemo']
+            },
+            test: {
+                files: ['src/*.js', 'src/*.scss', 'test/test.js', 'test/TestemSuite.html'],
+                tasks: ['buildTest']
+            },
+            build: {
+                files: ['src/*.js', 'src/*.scss', 'test/test.js'],
+                tasks: ['build'],
+                options: {
+                    spawn: false
+                }
             }
         },
         browserify: {
@@ -108,13 +118,18 @@ module.exports = require('gruntfile')(function (grunt) {
         },
         parallel: {
             demoTest: {
-                tasks: [{
-                   // grunt: true,
-                    args: ['demo']
-                }, {
-                    //grunt: true,
-                    args: ['test']
-                }]
+                options: {
+                    stream: true,
+                    grunt: true
+                },
+                tasks: ['parallel:demoWatch', 'watchTest']
+            },
+            demoWatch: {
+                options: {
+                    stream: true,
+                    grunt: true
+                },
+                tasks: ['watchDemo', 'launchDemo']
             }
         }
     });
@@ -130,25 +145,26 @@ module.exports = require('gruntfile')(function (grunt) {
 
     grunt.registerTask('buildDemo', ['build', 'clean:demo', 'concat:demo', 'browserify:demo']);
     grunt.registerTask('watchDemo', ['buildDemo', 'watch:demo']);
-    grunt.registerTask('demo', ['buildDemo', 'launchDemo']);
+    grunt.registerTask('demo', 'parallel:demoWatch');
 
     grunt.registerTask('buildTest', ['build', 'clean:test', 'concat:test', 'browserify:test']);
+    grunt.registerTask('watchTest', ['watch:test']);
     grunt.registerTask('test',  ['buildTest', 'mkdir:test-result', 'testem']);
 
 
     grunt.registerTask('dist', ['test', 'bumpup']);
 
-    grunt.registerTask('default', ['build', 'watch']);
+    grunt.registerTask('default', ['build', 'watch:build']);
 
     grunt.registerTask('demoTestParallel', ['parallel:demoTest']);
 
     grunt.registerTask('help', function(){
        grunt.log.writeln("Quatre tasks principales :\n" +
-           " grunt demo : pour lancer la demo \n" +
-           " grunt test : pour lancer tous les tests (unit test et testem \n" +
+           " grunt demo : pour lancer la demo & watcher les fichiers de demo en meme temps\n" +
+           " grunt test : pour lancer tous les tests testem \n" +
            " grunt dist : pour tout builder et bumper \n" +
-           " grunt demoTestParallel : lancement des taches tests et demo en paralleles \n" +
            "\n" +
+           " grunt demoTestParallel : pour tout builder (tests compris) et demotiser, attention, c'est violent. \n" +
            "Et comme d'habitude, la tache de base grunt qui build");
     });
 });
