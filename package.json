@@ -4,9 +4,10 @@
     "description": "ERROR: No README.md file found!",
     "main": "Gruntfile.js",
     "dependencies": {
-        "gruntfile": "0.1.0",
         "bower": "0.7.0",
         "grunt": "~0.4.0",
+        "grunt-browserify": "~1.2.4",
+        "grunt-bump": "0.0.13",
         "grunt-contrib-clean": "~0.5.0",
         "grunt-contrib-compass": "0.1.3",
         "grunt-contrib-concat": "0.1.3",
@@ -14,12 +15,11 @@
         "grunt-contrib-copy": "~0.4.1",
         "grunt-contrib-jshint": "~0.3.0",
         "grunt-contrib-watch": "~0.5.3",
-        "grunt-browserify": "~1.2.4",
-        "grunt-bumpup": "~0.2.0",
-        "grunt-testem": "~0.3.6",
-        "spatester": "~1.x.x",
         "grunt-mkdir": "~0.1.1",
-        "grunt-parallel": "0.3.1"
+        "grunt-parallel": "0.3.1",
+        "grunt-testem": "~0.3.6",
+        "gruntfile": "0.1.0",
+        "spatester": "~1.x.x"
     },
     "devDependencies": {
     },

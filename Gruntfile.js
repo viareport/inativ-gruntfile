@@ -7,7 +7,7 @@ module.exports = require('gruntfile')(function (grunt) {
     grunt.loadNpmTasks('grunt-contrib-jshint');
     grunt.loadNpmTasks('grunt-contrib-watch');
     grunt.loadNpmTasks('grunt-browserify');
-    grunt.loadNpmTasks('grunt-bumpup');
+    grunt.loadNpmTasks('grunt-bump');
     grunt.loadNpmTasks('grunt-testem');
     grunt.loadNpmTasks('grunt-mkdir');
     grunt.loadNpmTasks('grunt-parallel');
@@ -97,13 +97,12 @@ module.exports = require('gruntfile')(function (grunt) {
                 }
             }
         },
-        bumpup: {
+        bump: {
             options: {
-                version: function (old, type) {
-                    return old.replace(/([\d])+$/, grunt.option('wc-version'));
-                }
-            },
-            file: 'package.json'
+                commit: false,
+                createTag: false,
+                push: false
+            }
         },
         testem: {
             options: {
@@ -159,7 +158,7 @@ module.exports = require('gruntfile')(function (grunt) {
     grunt.registerTask('test',  ['buildTest', 'mkdir:test-result', 'testem']);
 
 
-    grunt.registerTask('dist', ['test', 'bumpup']);
+    grunt.registerTask('dist', ['test', 'bump']);
 
     grunt.registerTask('default', ['build', 'watch:build']);
 
